@@ -43,6 +43,11 @@ public class Clicker : MonoBehaviour
     {
         AchievementPanel.SetActive(!AchievementPanel.activeSelf);
     }
+    public GameObject Wrongx3Panel;
+    public void ShowAndHideWrongx3Panel()
+    {
+        Wrongx3Panel.SetActive(!Wrongx3Panel.activeSelf);
+    }
 
     [SerializeField] int Money;
     [SerializeField] int Coal1;
@@ -54,9 +59,11 @@ public class Clicker : MonoBehaviour
     private int CostPassiveDamager = 200;
     private int ClickDamage = 1;
     private int PassiveDamager = 0;
-    private int HP = 300;
+    private int HP = 150;
     private int Costx2Chance = 300;
     private int x2Chance = 0;
+    private int x3Chance = 0;
+    private int Costx3Chance = 500;
 
     public TextMeshProUGUI CostPassiveDamageText;
     public TextMeshProUGUI CostFirstUpdText;
@@ -69,6 +76,8 @@ public class Clicker : MonoBehaviour
     public TextMeshProUGUI NumOfDimondText;
     public TextMeshProUGUI Costx2ChanceText;
     public TextMeshProUGUI x2ChanceText;
+    public TextMeshProUGUI Costx3ChanceText;
+    public TextMeshProUGUI x3ChanceText;
     public TextMeshProUGUI Achievement1Text;
     public TextMeshProUGUI Achievement1MaxText;
     public TextMeshProUGUI Achievement2Text;
@@ -114,6 +123,8 @@ public class Clicker : MonoBehaviour
             PassiveDamager = sv.PassiveDamager;
             x2Chance = sv.x2Chance;
             Costx2Chance = sv.Costx2Chance;
+            x3Chance = sv.x3Chance;
+            Costx3Chance = sv.Costx3Chance;
             isAchievement1 = sv.isAchievement1;
             isAchievement2 = sv.isAchievement2;
             isAchievement3 = sv.isAchievement3;
@@ -148,6 +159,8 @@ public class Clicker : MonoBehaviour
         NumOfDimondText.text = Dimond1 + " ";
         Costx2ChanceText.text = Costx2Chance + "$";
         x2ChanceText.text = "Current chance: " + x2Chance + " | 70";
+        Costx3ChanceText.text = Costx3Chance + "$";
+        x3ChanceText.text = "Current chance: " + x3Chance + " | 70";
         if (isAchievement1 == false) Achievement1Text.text = "Completed";
         else Achievement1Text.text = "Not completed";
         Achievement1MaxText.text = Achievement1Max + " | 100";
@@ -247,6 +260,20 @@ public class Clicker : MonoBehaviour
         }
     }
 
+    public void ClickToBuyx3Chance()
+    {
+        if (Money >= Costx3Chance && x2Chance == 70 && x3Chance < 70)
+        {
+            Money -= Costx3Chance;
+            Costx3Chance += 100;
+            x3Chance += 5;
+        }
+        if (x2Chance < 70)
+        {
+            Wrongx3Panel.SetActive(true);
+        }
+    }
+
     public void OnClickToBuyDynamite()
     {
         if (Money >= 50) 
@@ -281,30 +308,36 @@ public class Clicker : MonoBehaviour
         if (HP <= 0)
         {
             int rndNumForx2 = Random.Range(0, 100);
+            int rndNumForx3 = Random.Range(0, 100);
             if (CheckCoal == true && CheckIron == false && CheckEmerald == false && CheckGold == false && CheckDimond == false)
             {
                 if (rndNumForx2 <= x2Chance) Coal1 += 2;
                 else Coal1++;
+                if (rndNumForx3 <= x3Chance) Coal1 += 3;
             }
             if (CheckCoal == false && CheckIron == true && CheckEmerald == false && CheckGold == false && CheckDimond == false)
             {
                 if (rndNumForx2 <= x2Chance) Iron1 += 2;
                 else Iron1++;
+                if (rndNumForx3 <= x3Chance) Iron1 += 3;
             }
             if (CheckCoal == false && CheckIron == false && CheckEmerald == true && CheckGold == false && CheckDimond == false)
             {
                 if (rndNumForx2 <= x2Chance) Emerald1 += 2;
                 else Emerald1++;
+                if (rndNumForx3 <= x3Chance) Emerald1 += 3;
             }
             if (CheckCoal == false && CheckIron == false && CheckEmerald == false && CheckGold == true && CheckDimond == false)
             {
                 if (rndNumForx2 <= x2Chance) Gold1 += 2;
                 else Gold1++;
+                if (rndNumForx3 <= x3Chance) Gold1 += 3;
             }
             if (CheckCoal == false && CheckIron == false && CheckEmerald == false && CheckGold == false && CheckDimond == true)
             {
                 if (rndNumForx2 <= x2Chance) Dimond1 += 2;
                 else Dimond1++;
+                if (rndNumForx3 <= x3Chance) Dimond1 += 3;
             }
             int rndNum = Random.Range(0, 100);
             if (rndNum <= 40)
@@ -319,7 +352,7 @@ public class Clicker : MonoBehaviour
                 CheckEmerald = false;
                 CheckGold = false;
                 CheckDimond = false;
-                HP = 300;
+                HP = 150;
             }
             else if(rndNum > 40 && rndNum <= 70)
             {
@@ -333,7 +366,7 @@ public class Clicker : MonoBehaviour
                 CheckEmerald = false;
                 CheckGold = false;
                 CheckDimond = false;
-                HP = 500;
+                HP = 300;
             }
             else if(rndNum > 70 && rndNum <= 85)
             {
@@ -394,6 +427,8 @@ public class Clicker : MonoBehaviour
         sv.PassiveDamager = PassiveDamager;
         sv.Costx2Chance = Costx2Chance;
         sv.x2Chance = x2Chance;
+        sv.Costx3Chance = Costx3Chance;
+        sv.x3Chance = x3Chance;
         sv.isAchievement1 = isAchievement1;
         sv.isAchievement2 = isAchievement2;
         sv.isAchievement3 = isAchievement3;
@@ -454,7 +489,7 @@ public class Save
 {
     public int Money, Coal, Iron, Emerald, Gold, Dimond;
     public int Costx2Chance, CostFirstUpd, CostPassiveDamager, ClickDamage, PassiveDamager;
-    public int x2Chance;
+    public int x2Chance, x3Chance, Costx3Chance;
     public bool isAchievement1, isAchievement2, isAchievement3, isAchievement4, isAchievement5;
     public int Achievement1Max, Achievement2Max, Achievement3Max, Achievement4Max, Achievement5Max;
 }
