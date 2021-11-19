@@ -1,0 +1,460 @@
+using System.Collections;
+using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class Clicker : MonoBehaviour
+{
+    public static Clicker Instance;
+
+
+    private void Start()
+    {
+        StartCoroutine(PassiveDamagerPerSec());
+    }
+
+    public GameObject ChestPanel;
+    public void ShowAndHideChestPanel()
+    {
+        ChestPanel.SetActive(!ChestPanel.activeSelf);
+    }
+
+    public GameObject ShopPanel;
+    public void ShowAndHideShopPanel()
+    {
+        ShopPanel.SetActive(!ShopPanel.activeSelf);
+    }
+
+    public GameObject SettingPanel;
+    public void ShowAndHideSettingPanel()
+    {
+        SettingPanel.SetActive(!SettingPanel.activeSelf);
+    }
+
+    public GameObject HowToPlayPanel;
+    public void ShowAndHideHowToPlayPanel()
+    {
+        HowToPlayPanel.SetActive(!HowToPlayPanel.activeSelf);
+    }
+
+    public GameObject AchievementPanel;
+    public void ShowAndHideAchievementPanel()
+    {
+        AchievementPanel.SetActive(!AchievementPanel.activeSelf);
+    }
+
+    [SerializeField] int Money;
+    [SerializeField] int Coal1;
+    [SerializeField] int Iron1;
+    [SerializeField] int Emerald1;
+    [SerializeField] int Gold1;
+    [SerializeField] int Dimond1;
+    private int CostFirstUpd = 100;
+    private int CostPassiveDamager = 200;
+    private int ClickDamage = 1;
+    private int PassiveDamager = 0;
+    private int HP = 300;
+    private int Costx2Chance = 300;
+    private int x2Chance = 0;
+
+    public TextMeshProUGUI CostPassiveDamageText;
+    public TextMeshProUGUI CostFirstUpdText;
+    public TextMeshProUGUI MoneyText;
+    public TextMeshProUGUI HPText;
+    public TextMeshProUGUI NumOfCoalText;
+    public TextMeshProUGUI NumOfIronText;
+    public TextMeshProUGUI NumOfEmeraldText;
+    public TextMeshProUGUI NumOfGoldText;
+    public TextMeshProUGUI NumOfDimondText;
+    public TextMeshProUGUI Costx2ChanceText;
+    public TextMeshProUGUI x2ChanceText;
+    public TextMeshProUGUI Achievement1Text;
+    public TextMeshProUGUI Achievement1MaxText;
+    public TextMeshProUGUI Achievement2Text;
+    public TextMeshProUGUI Achievement2MaxText;
+    public TextMeshProUGUI Achievement3Text;
+    public TextMeshProUGUI Achievement3MaxText;
+    public TextMeshProUGUI Achievement4Text;
+    public TextMeshProUGUI Achievement4MaxText;
+    public TextMeshProUGUI Achievement5Text;
+    public TextMeshProUGUI Achievement5MaxText;
+    public TextMeshProUGUI CurrentDamage;
+    public TextMeshProUGUI CurrentPassiveDamage;
+
+    private Save sv = new Save();
+
+    [Header("Achievements")]
+    private int Achievement1Max;
+    private int Achievement2Max;
+    private int Achievement3Max;
+    private int Achievement4Max;
+    private int Achievement5Max;
+
+    private bool isAchievement1 = true;
+    private bool isAchievement2 = true;
+    private bool isAchievement3 = true;
+    private bool isAchievement4 = true;
+    private bool isAchievement5 = true;
+
+    private void Awake()
+    {
+        if (PlayerPrefs.HasKey("SV"))
+        {
+            sv = JsonUtility.FromJson<Save>(PlayerPrefs.GetString("SV"));
+            Money = sv.Money;
+            Coal1 = sv.Coal;
+            Iron1 = sv.Iron;
+            Emerald1 = sv.Emerald;
+            Gold1 = sv.Gold;
+            Dimond1 = sv.Dimond;
+            CostFirstUpd = sv.CostFirstUpd;
+            CostPassiveDamager = sv.CostPassiveDamager;
+            ClickDamage = sv.ClickDamage;
+            PassiveDamager = sv.PassiveDamager;
+            x2Chance = sv.x2Chance;
+            Costx2Chance = sv.Costx2Chance;
+            isAchievement1 = sv.isAchievement1;
+            isAchievement2 = sv.isAchievement2;
+            isAchievement3 = sv.isAchievement3;
+            isAchievement4 = sv.isAchievement4;
+            isAchievement5 = sv.isAchievement5;
+            Achievement1Max = sv.Achievement1Max;
+            Achievement2Max = sv.Achievement2Max;
+            Achievement3Max = sv.Achievement3Max;
+            Achievement4Max = sv.Achievement4Max;
+            Achievement5Max = sv.Achievement5Max;
+            Achievement5Max = sv.Achievement5Max;
+        }
+    }
+
+    public void Click()
+    {
+        HP -= ClickDamage;
+        if (isAchievement1 == true && Achievement1Max < 100) Achievement1Max++;
+        if (isAchievement2 == true && Achievement2Max < 1000) Achievement2Max++;
+    }
+
+    private void Update()
+    {
+        HPText.text = HP + "HP";
+        MoneyText.text = Money + "$";
+        CostFirstUpdText.text = CostFirstUpd + "$";
+        CostPassiveDamageText.text = CostPassiveDamager + "$";
+        NumOfCoalText.text = Coal1 + " ";
+        NumOfIronText.text = Iron1 + " ";
+        NumOfEmeraldText.text = Emerald1 + " ";
+        NumOfGoldText.text = Gold1 + " ";
+        NumOfDimondText.text = Dimond1 + " ";
+        Costx2ChanceText.text = Costx2Chance + "$";
+        x2ChanceText.text = "Current chance: " + x2Chance + " | 70";
+        if (isAchievement1 == false) Achievement1Text.text = "Completed";
+        else Achievement1Text.text = "Not completed";
+        Achievement1MaxText.text = Achievement1Max + " | 100";
+        if (isAchievement2 == false) Achievement2Text.text = "Completed";
+        else Achievement2Text.text = "Not completed";
+        Achievement2MaxText.text = Achievement2Max + " | 1000";
+        if (isAchievement3 == false) Achievement3Text.text = "Completed";
+        else Achievement3Text.text = "Not completed";
+        Achievement3MaxText.text = Achievement3Max + " | 100";
+        if (isAchievement4 == false) Achievement4Text.text = "Completed";
+        else Achievement4Text.text = "Not completed";
+        Achievement4MaxText.text = Achievement4Max + " | 100";
+        if (isAchievement5 == false) Achievement5Text.text = "Completed";
+        else Achievement5Text.text = "Not completed";
+        Achievement5MaxText.text = Achievement5Max + " | 100";
+        CurrentDamage.text = ClickDamage + " ";
+        CurrentPassiveDamage.text = PassiveDamager + " ";
+        SwitchTarget();
+        OnApplicationQuit();
+    }
+
+    public void ClickToSellCoal()
+    {
+        if (Coal1 > 0)
+        {
+            Money += 50;
+            Coal1--;
+            if (isAchievement3 == true && Achievement3Max < 100) Achievement3Max++;
+        }
+    }
+
+    public void ClickToSellIron()
+    {
+        if (Iron1 > 0)
+        {
+            Money += 80;
+            Iron1--;
+        }
+    }
+
+    public void ClickToSellEmerald()
+    {
+        if(Emerald1 > 0)
+        {
+            Money += 200;
+            Emerald1--;
+            if (isAchievement4 == true && Achievement4Max < 100) Achievement4Max++;
+        }
+    }
+
+    public void ClickToSellGold()
+    {
+        if(Gold1 > 0)
+        {
+            Money += 500;
+            Gold1--;
+        }
+    }
+
+    public void ClickToSellDimond()
+    {
+        if (Dimond1 > 0)
+        {
+            Money += 2000;
+            Dimond1--;
+            if (isAchievement5 == true && Achievement5Max < 100) Achievement5Max++;
+        }
+    }
+
+    public void ClickToBuyFirstUpd()
+    {
+        if (Money >= CostFirstUpd)
+        {
+            Money -= CostFirstUpd;
+            CostFirstUpd += 75;
+            ClickDamage += 1;
+        }
+    }
+
+    public void ClickToBuyPassiveDamager()
+    {
+        if (Money >= CostPassiveDamager)
+        {
+            Money -= CostPassiveDamager;
+            CostPassiveDamager += 200;
+            PassiveDamager += 1;
+        }
+    }
+
+    public void ClickToBuyx2Chance()
+    {
+        if (Money >= Costx2Chance && x2Chance < 70)
+        {
+            Money -= Costx2Chance;
+            Costx2Chance += 50;
+            x2Chance += 5;
+        }
+    }
+
+    public void OnClickToBuyDynamite()
+    {
+        if (Money >= 50) 
+        {
+            Money -= 50;
+            HP -= 100;
+        }
+    }
+
+    IEnumerator PassiveDamagerPerSec()
+    {
+        while (true)
+        {
+            HP -= PassiveDamager;
+            yield return new WaitForSeconds(1);
+        }
+    }
+
+    public GameObject Coal;
+    public GameObject Iron;
+    public GameObject Emerald;
+    public GameObject Gold;
+    public GameObject Dimond;
+    private bool CheckCoal = true;
+    private bool CheckIron = false;
+    private bool CheckEmerald = false;
+    private bool CheckGold = false;
+    private bool CheckDimond = false;
+
+    private void SwitchTarget()
+    {
+        if (HP <= 0)
+        {
+            int rndNumForx2 = Random.Range(0, 100);
+            if (CheckCoal == true && CheckIron == false && CheckEmerald == false && CheckGold == false && CheckDimond == false)
+            {
+                if (rndNumForx2 <= x2Chance) Coal1 += 2;
+                else Coal1++;
+            }
+            if (CheckCoal == false && CheckIron == true && CheckEmerald == false && CheckGold == false && CheckDimond == false)
+            {
+                if (rndNumForx2 <= x2Chance) Iron1 += 2;
+                else Iron1++;
+            }
+            if (CheckCoal == false && CheckIron == false && CheckEmerald == true && CheckGold == false && CheckDimond == false)
+            {
+                if (rndNumForx2 <= x2Chance) Emerald1 += 2;
+                else Emerald1++;
+            }
+            if (CheckCoal == false && CheckIron == false && CheckEmerald == false && CheckGold == true && CheckDimond == false)
+            {
+                if (rndNumForx2 <= x2Chance) Gold1 += 2;
+                else Gold1++;
+            }
+            if (CheckCoal == false && CheckIron == false && CheckEmerald == false && CheckGold == false && CheckDimond == true)
+            {
+                if (rndNumForx2 <= x2Chance) Dimond1 += 2;
+                else Dimond1++;
+            }
+            int rndNum = Random.Range(0, 100);
+            if (rndNum <= 40)
+            {
+                Coal.SetActive(true);
+                Iron.SetActive(false);
+                Emerald.SetActive(false);
+                Gold.SetActive(false);
+                Dimond.SetActive(false);
+                CheckCoal = true;
+                CheckIron = false;
+                CheckEmerald = false;
+                CheckGold = false;
+                CheckDimond = false;
+                HP = 300;
+            }
+            else if(rndNum > 40 && rndNum <= 70)
+            {
+                Coal.SetActive(false);
+                Iron.SetActive(true);
+                Emerald.SetActive(false);
+                Gold.SetActive(false);
+                Dimond.SetActive(false);
+                CheckCoal = false;
+                CheckIron = true;
+                CheckEmerald = false;
+                CheckGold = false;
+                CheckDimond = false;
+                HP = 500;
+            }
+            else if(rndNum > 70 && rndNum <= 85)
+            {
+                Coal.SetActive(false);
+                Iron.SetActive(false);
+                Emerald.SetActive(true);
+                Gold.SetActive(false);
+                Dimond.SetActive(false);
+                CheckCoal = false;
+                CheckIron = false;
+                CheckEmerald = true;
+                CheckGold = false;
+                CheckDimond = false;
+                HP = 700;
+            }
+            else if (rndNum > 85 && rndNum <= 95)
+            {
+                Coal.SetActive(false);
+                Iron.SetActive(false);
+                Emerald.SetActive(false);
+                Gold.SetActive(true);
+                Dimond.SetActive(false);
+                CheckCoal = false;
+                CheckIron = false;
+                CheckEmerald = false;
+                CheckGold = true;
+                CheckDimond = false;
+                HP = 1000;
+            }
+            else if (rndNum > 95 && rndNum <= 100)
+            {
+                Coal.SetActive(false);
+                Iron.SetActive(false);
+                Emerald.SetActive(false);
+                Gold.SetActive(false);
+                Dimond.SetActive(true);
+                CheckCoal = false;
+                CheckIron = false;
+                CheckEmerald = false;
+                CheckGold = false;
+                CheckDimond = true;
+                HP = 2000;
+            }
+        }
+    }
+
+    private void OnApplicationQuit()
+    {
+        sv.Money = Money;
+        sv.Coal = Coal1;
+        sv.Iron = Iron1;
+        sv.Emerald = Emerald1;
+        sv.Gold = Gold1;
+        sv.Dimond = Dimond1;
+        sv.CostFirstUpd = CostFirstUpd;
+        sv.CostPassiveDamager = CostPassiveDamager;
+        sv.ClickDamage = ClickDamage;
+        sv.PassiveDamager = PassiveDamager;
+        sv.Costx2Chance = Costx2Chance;
+        sv.x2Chance = x2Chance;
+        sv.isAchievement1 = isAchievement1;
+        sv.isAchievement2 = isAchievement2;
+        sv.isAchievement3 = isAchievement3;
+        sv.isAchievement4 = isAchievement4;
+        sv.isAchievement5 = isAchievement5;
+        sv.Achievement1Max = Achievement1Max;
+        sv.Achievement2Max = Achievement2Max;
+        sv.Achievement3Max = Achievement3Max;
+        sv.Achievement4Max = Achievement4Max;
+        sv.Achievement5Max = Achievement5Max;
+
+        PlayerPrefs.SetString("SV", JsonUtility.ToJson(sv));
+    }
+
+    public void OnClickAchievement1Button()
+    {
+        if(isAchievement1 == true && Achievement1Max == 100)
+        {
+            Money += 300;
+            isAchievement1 = false;
+        }
+    }
+    public void OnClickAchievement2Button()
+    {
+        if (isAchievement2 == true && Achievement2Max == 1000)
+        {
+            Money += 1500;
+            isAchievement2 = false;
+        }
+    }
+    public void OnClickAchievement3Button()
+    {
+        if (isAchievement3 == true && Achievement3Max == 100)
+        {
+            Money += 3000;
+            isAchievement3 = false;
+        }
+    }
+    public void OnClickAchievement4Button()
+    {
+        if (isAchievement4 == true && Achievement4Max == 100)
+        {
+            Money += 5000;
+            isAchievement4 = false;
+        }
+    }
+    public void OnClickAchievement5Button()
+    {
+        if (isAchievement5 == true && Achievement5Max == 100)
+        {
+            Money += 10000;
+            isAchievement5 = false;
+        }
+    }
+}
+
+public class Save
+{
+    public int Money, Coal, Iron, Emerald, Gold, Dimond;
+    public int Costx2Chance, CostFirstUpd, CostPassiveDamager, ClickDamage, PassiveDamager;
+    public int x2Chance;
+    public bool isAchievement1, isAchievement2, isAchievement3, isAchievement4, isAchievement5;
+    public int Achievement1Max, Achievement2Max, Achievement3Max, Achievement4Max, Achievement5Max;
+}
