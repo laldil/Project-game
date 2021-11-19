@@ -1,0 +1,58 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class AudioController : MonoBehaviour
+{
+    public AudioSource MusicSFX;
+    public AudioSource SoundSFX;
+    public AudioSource SoundSFX1;
+    public AudioSource SoundSFX2;
+    public AudioSource SoundSFX3;
+    public AudioSource SoundSFX4;
+
+    public Sprite MusicOn;
+    public Sprite MusicOff;
+    public Sprite SoundOn;
+    public Sprite SoundOff;
+
+    public Image MusicButton;
+    public Image SoundButton;
+
+    public void OnClickMusicButton()
+    {
+        if(MusicSFX.volume >= 0.1f)
+        {
+            MusicSFX.volume = 0;
+            MusicButton.GetComponent<Image>().sprite = MusicOff;
+        }
+        else
+        {
+            MusicSFX.volume = 0.75f;
+            MusicButton.GetComponent<Image>().sprite = MusicOn;
+        }
+    }
+
+    public void OnClickSoundButton()
+    {
+        if (SoundSFX.volume >= 0.1f && SoundSFX1.volume >= 0.1f && SoundSFX2.volume >= 0.1f && SoundSFX3.volume >= 0.1f && SoundSFX4.volume >= 0.1f)
+        {
+            SoundSFX.volume = 0;
+            SoundSFX1.volume = 0;
+            SoundSFX2.volume = 0;
+            SoundSFX3.volume = 0;
+            SoundSFX4.volume = 0;
+            SoundButton.GetComponent<Image>().sprite = SoundOff;
+        }
+        else
+        {
+            SoundSFX.volume = 0.75f;
+            SoundSFX1.volume = 0.75f;
+            SoundSFX2.volume = 0.75f;
+            SoundSFX3.volume = 0.75f;
+            SoundSFX4.volume = 0.75f;
+            SoundButton.GetComponent<Image>().sprite = SoundOn;
+        }
+    }
+}
